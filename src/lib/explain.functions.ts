@@ -7,7 +7,7 @@ export const explainLine = createServerFn({ method: "POST" })
     return { line, level: d?.level === 1 ? 1 : 0 };
   })
   .handler(async ({ data }) => {
-    const key = process.env.LOVABLE_API_KEY;
+    const key = process.env['LOVABLE_API_KEY'];
     if (!key) throw new Error("AI not configured");
     const prompt =
       "You help people with ADHD, dyslexia or other learning difficulties understand podcasts. " +

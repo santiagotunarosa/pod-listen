@@ -31,6 +31,7 @@ const EX = [
     simple: "If you only judge things by your own habits, the world feels small. Try other people’s food, places and ideas, and it grows.", like: "trying a dish you’ve never heard of instead of ordering your usual.",
     simpler: "Step outside your routine to see more.", likeB: "taking a different street home and finding a new café.", key: "Other perspectives make the world bigger" },
 ];
+const exAt = (i: number) => EX[i]!;
 const CHIPS = ["Huberman Lab", "Jocko Podcast", "The Moth", "Parts Unknown"];
 
 function Logo() {
@@ -44,8 +45,8 @@ type Result = { simple: string; like: string; key: string };
 
 function TrySection() {
   const [ex, setEx] = useState<number | null>(0);
-  const [line, setLine] = useState(EX[0].line);
-  const [src, setSrc] = useState(EX[0].src);
+  const [line, setLine] = useState(exAt(0).line);
+  const [src, setSrc] = useState(exAt(0).src);
   const [level, setLevel] = useState(0);
   const [result, setResult] = useState<Result | null>(null);
   const [status, setStatus] = useState<string | null>(null);
@@ -77,7 +78,7 @@ function TrySection() {
   };
 
   const pick = (i: number) => {
-    setEx(i); setLine(EX[i].line); setSrc(EX[i].src);
+    setEx(i); setLine(exAt(i).line); setSrc(exAt(i).src);
     setResult(null); setStatus(null); setLevel(0);
     window.speechSynthesis?.cancel(); setSpeaking(false);
   };
@@ -89,7 +90,7 @@ function TrySection() {
     const wait = new Promise((r) => setTimeout(r, 700));
     let r: Result | null = null;
     if (ex !== null) {
-      const e = EX[ex];
+      const e = exAt(ex);
       r = lvl === 0 ? { simple: e.simple, like: e.like, key: e.key } : { simple: e.simpler, like: e.likeB, key: e.key };
       await wait;
     } else {
@@ -107,7 +108,7 @@ function TrySection() {
   };
 
   const openSave = () => {
-    const k = result?.key || (ex !== null ? EX[ex].key : line.trim().slice(0, 80));
+    const k = result?.key || (ex !== null ? exAt(ex).key : line.trim().slice(0, 80));
     if (!k) return;
     setSaveKey(k); setSaving(true);
     setTimeout(() => document.getElementById("saveBox")?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 50);
