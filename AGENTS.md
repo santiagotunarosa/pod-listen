@@ -28,3 +28,7 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## POD presentation
+- Keep editorial presentation and browser-only visual motion in `src/components/pod-editorial.tsx`, with live demo and waitlist handlers in the home route, so visual redesigns do not replace working behavior.
+- Use the editorial variants of the shared Button for POD controls so all actions retain the same accessible control foundation.
