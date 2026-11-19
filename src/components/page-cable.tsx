@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 // sweeping across the gap between each section. The loops get fewer as you go down: it untangles.
 // Where the jack is in tangled-earphones.png (fraction of the image's width / height).
 const JACK = { u: 178 / 1224, v: 1154 / 1285 };
-const LOOPS = [3, 2, 1, 1, 0, 0]; // loops in each sweep, top to bottom
+const LOOPS = [2, 2, 1, 1, 0, 0]; // loops in each sweep, top to bottom
 
 type Pt = [number, number];
 
@@ -12,7 +12,7 @@ function sweep(pts: Pt[], from: Pt, to: Pt, loops: number, r: number, amp: numbe
   const dir = Math.sign(to[0] - from[0]) || 1;
   const steps = 260;
   // loops sit together, a bit off-centre, so they read as one small knot
-  const centres = Array.from({ length: loops }, (_, i) => 0.55 + (i - (loops - 1) / 2) * 0.06 + (seed % 2 ? 0.08 : -0.08));
+  const centres = Array.from({ length: loops }, (_, i) => 0.55 + (i - (loops - 1) / 2) * 0.035 + (seed % 2 ? 0.08 : -0.08));
   for (let i = 1; i <= steps; i++) {
     const s = i / steps;
     const ease = s * s * (3 - 2 * s);
@@ -23,7 +23,7 @@ function sweep(pts: Pt[], from: Pt, to: Pt, loops: number, r: number, amp: numbe
       const t = (s - c) / w;
       if (t > -0.5 && t < 0.5) {
         const th = (t + 0.5) * Math.PI * 2;
-        const rr = r * (1 - j * 0.12);
+        const rr = r * (j % 2 ? 0.62 : 1);
         x += -dir * rr * Math.sin(th);
         y += -rr * (1 - Math.cos(th)) * 0.9;
       }
@@ -67,8 +67,12 @@ export function PageCable() {
       const pts: Pt[] = [jack];
       // from the jack, drop down-left into the first gap
       const g0 = gaps[0];
-      const first: Pt = [Math.max(16, jack[0] - W * 0.18), g0.y];
-      for (let i = 1; i <= 40; i++) { const s = i / 40; pts.push([jack[0] + (first[0] - jack[0]) * Math.sin(s * Math.PI / 2), jack[1] + (first[1] - jack[1]) * (1 - Math.cos(s * Math.PI / 2))]); }
+      // from the jack the cable falls down-left, then curls round to head right along the first gap
+      const bulge = Math.min(W * 0.12, 140);
+      for (let i = 1; i <= 60; i++) {
+        const s = i / 60;
+        pts.push([jack[0] - bulge * Math.sin(s * Math.PI) * 0.9 + bulge * 0.6 * s * s, jack[1] + (g0.y - jack[1]) * Math.sin(s * Math.PI / 2)]);
+      }
       let side = 1; // heading right first
       gaps.forEach((g, i) => {
         const start = pts[pts.length - 1];
