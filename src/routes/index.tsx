@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { explainLine } from "@/lib/explain.functions";
 import { Button } from "@/components/ui/button";
-import { ScrollCable } from "@/components/scroll-cable";
+import { PageCable } from "@/components/page-cable";
 import { Logo, Hero, Problem, Introducing, How, Features, JoinHeading, Footer, EditorialMotion, supportLine } from "@/components/pod-editorial";
 
 export const Route = createFileRoute("/")({
@@ -259,7 +259,7 @@ function Index() {
   return <>
     <EditorialMotion />
     <nav className="top" aria-label="Main"><div className="wrap"><a className="brand" href="#top" aria-label="POD home"><Logo />POD</a><div className="links"><a href="#problem">The problem</a><a href="#how">How it works</a><a href="#try">Try it</a><a href="#join">Join</a></div><Button asChild variant="ink" className="cta"><a href="#join">Join the waitlist</a></Button></div></nav>
-    <main><Hero /><ScrollCable level={5} /><Problem /><ScrollCable level={4} /><Introducing /><ScrollCable level={3} /><How /><ScrollCable level={2} /><Features /><ScrollCable level={1} /><TrySection /><ScrollCable level={0} plug /><JoinSection /></main>
+    <main className="has-cable"><Hero /><Problem /><Introducing /><How /><Features /><TrySection /><JoinSection /><PageCable /></main>
     <Footer />
   </>;
 }
